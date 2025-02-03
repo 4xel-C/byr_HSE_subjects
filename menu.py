@@ -7,7 +7,7 @@ console = Console()
 # Starting menu function
 def select_quarter() -> int:
     """Starting menu function to display the quarter selection to the user and manage his choice."""
-    console.print("\n-----Choose the quarter-----\n")
+    console.print("\n[bold green]-----Choose the quarter-----\n")
     console.print("1--Q1 (Jan - Mar)")
     console.print("2--Q2 (Apr - Jun)")
     console.print("3--Q3 (Jul - Sep)")

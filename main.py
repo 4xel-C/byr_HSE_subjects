@@ -1,12 +1,14 @@
-from procedures import ProcedureHandler
+from procedures import ProcedureManager
 from menu import select_quarter, select_generation_method
 
-PATH = "data/procedure_list.xlsx"
+# Path to the DATA folder containing the procedures list, the history and templates
+PATH = "data/"
 
 
 def main():
-    # Initializing the ProcedureHandler object
-    procedures = ProcedureHandler(PATH)
+    # Initializing the ProcedureManager object
+    manager = ProcedureManager(PATH)
+    print(manager.procedures)
 
     # quarter selection
     quarter = select_quarter()

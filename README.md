@@ -3,7 +3,7 @@
 
 ## 🚀 To Be Implemented  
 
-- [ ] Complete the menu logic and overall program functionality.  
+- [ ] Complete the menu navigation logic. 
 - [ ] Enable priority selection of newly added procedures that have never appeared in the archive.  
 - [ ] Enable cherry picking when reviewing the selection.
 - [ ] Enable procedure checking to make sure no procedure are forgotten.
@@ -28,3 +28,10 @@ Two options are available for generating the document:
 After proposing the procedures for review, the program lets the user edit the selection by:  
 - Choosing a specific month.  
 - Deciding whether to randomly select a new procedure from the oldest ones or manually pick a preferred one. 
+
+## Files
+
+- `main.py`: This file will contains all the CLI's menus interaction. It uses the functions from the `menu.py` to manage menus displaying and user's choices.
+- `procedures.py`: This file contains the data structure to manage procedures using the following classes:
+   -  `Procedure` dataclass: This class map the information of each procedure into a `Procedure` object, to keep track of the tittle, their code, their function (reference document or not), and the last date they were discussed among the teams.
+   - `ProcedureManager`: Class to load all the procedures available. It recieves a `'PATH'` to instanciate the handler, with PATH beeing the path of the folder containing the procedures, the history, and the templates.
