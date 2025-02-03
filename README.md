@@ -1,6 +1,14 @@
 
 # 🚧 UNDER CONSTRUCTION 🚧  
 
+## 🚀 To Be Implemented  
+
+- [ ] Complete the menu logic and overall program functionality.  
+- [ ] Enable priority selection of newly added procedures that have never appeared in the archive.  
+- [ ] Enable cherry picking when reviewing the selection.
+- [ ] Enable procedure checking to make sure no procedure are forgotten.
+
+
 # Automation of Subject Generation for HSE Discussions  
 
 ## Introduction  
@@ -20,11 +28,3 @@ Two options are available for generating the document:
 After proposing the procedures for review, the program lets the user edit the selection by:  
 - Choosing a specific month.  
 - Deciding whether to randomly select a new procedure from the oldest ones or manually pick a preferred one. 
-
-## 🚀 To Be Implemented  
-
-- [ ] Complete the menu logic and overall program functionality.  
-- [ ] Enable priority selection of newly added procedures that have never appeared in the archive.  
-- [ ] Enable cherry picking when reviewing the selection.
-- [ ] Enable procedure checking to make sure no procedure are forgotten.
-
