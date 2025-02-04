@@ -31,7 +31,36 @@ After proposing the procedures for review, the program lets the user edit the se
 
 ## Files
 
-- `main.py`: This file will contains all the CLI's menus interaction. It uses the functions from the `menu.py` to manage menus displaying and user's choices.
-- `procedures.py`: This file contains the data structure to manage procedures using the following classes:
-   -  `Procedure` dataclass: This class map the information of each procedure into a `Procedure` object, to keep track of the tittle, their code, their function (reference document or not), and the last date they were discussed among the teams.
-   - `ProcedureManager`: Class to load all the procedures available. It recieves a `'PATH'` to instanciate the handler, with PATH beeing the path of the folder containing the procedures, the history, and the templates.
+- `main.py`: Launcher file. This file will contains all the CLI's menus interaction. It uses the functions from the `menu.py` to manage menus displaying and user's choices.
+- `utils` package:
+   - `procedures.py`: This file contains the data structure to manage procedures using the following classes:
+      -  `Procedure` dataclass: This class map the information of each procedure into a `Procedure` object, to keep track of the tittle, their code, their function (reference document or not), and the last date they were discussed among the teams.
+      - `ProcedureManager`: Class to load all the procedures available. It recieves a `'PATH'` to instanciate the handler, with PATH beeing the path of the folder containing the procedures, the history, and the templates.
+   - `menu`: File containing the function used to display and interact with each nested menus.
+- `test.py`: Containing 
+
+## Technologies Used
+- `UV`: For dependencies management and virtual environment.
+- `Jupyter Notebook`: To manipulate the data.
+- `Rich`: To displayer more user friendly messages in the console.
+- `Openpyxl`: To manipulate and extract information from the excel files.
+- `Datetime`: To keep track of the history of the discussion through datetime object.
+- `Dataclass`: To facilitate creation of a data object.
+
+## Requirement
+- python >= 3.13
+- openpyxl >= 3.1.5
+- rich >= 13.9.4
+
+## Installation
+
+1. Clone the repository
+2. Set up the environment using UV
+```bash
+UV venv
+UV sync
+```
+3. Start the application
+```bash
+python main.py
+```
