@@ -37,7 +37,7 @@ After proposing the procedures for review, the program lets the user edit the se
       -  `Procedure` dataclass: This class map the information of each procedure into a `Procedure` object, to keep track of the tittle, their code, their function (reference document or not), and the last date they were discussed among the teams.
       - `ProcedureManager`: Class to load all the procedures available. It recieves a `'PATH'` to instanciate the handler, with PATH beeing the path of the folder containing the procedures, the history, and the templates.
    - `menu`: File containing the function used to display and interact with each nested menus.
-- `test.py`: Containing 
+- `test.py`: Containing all UnitTesting to ensure fiability.
 
 ## Technologies Used
 - `UV`: For dependencies management and virtual environment.
@@ -56,11 +56,11 @@ After proposing the procedures for review, the program lets the user edit the se
 
 1. Clone the repository
 2. Set up the environment using UV
-```bash
-UV venv
-UV sync
-```
+   ```bash
+   UV venv
+   UV sync
+   ```
 3. Start the application
-```bash
-python main.py
-```
+   ```bash
+   python main.py
+   ```
