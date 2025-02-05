@@ -56,8 +56,7 @@ class ProcedureManager:
     def select_procedures(self, n=3) -> list[Procedure]:
         """Select n random procedures among the oldest review"""
         procedures = sorted(self.procedures, key = lambda x: x.last_review)
-        print(procedures)
-        
+
         # return the n first procedures
         return procedures[:n]
 

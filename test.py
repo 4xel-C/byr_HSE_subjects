@@ -144,6 +144,26 @@ class TestProcedureManager(unittest.TestCase):
         self.assertEqual(selected[1].number, "PROC004")  
         self.assertEqual(selected[2].number, "PROC002")  
 
+    @patch('utils.procedures.load_workbook')
+    def test_select_procedure_2(self, mock_load_workbook):
+        
+        # Two 'load_workbook' function are called when instanciating the ProcedureManager: 1 to load the procedures, the other, the history.
+        mock_load_workbook.side_effect = [self.mock_workbook_proc, self.mock_workbook_history]
+        
+        # Initialize ProcedureManager
+        manager = ProcedureManager(path='/fake/path/')
+
+        selected = manager.select_procedures(2)
+
+        self.assertEqual(len(selected), 2)
+
+        # Check if there are sorted by data
+        self.assertLessEqual(selected[0].last_review, selected[1].last_review)
+
+        # Check the 3 older procedures
+        self.assertEqual(selected[0].number, "PROC003")  
+        self.assertEqual(selected[1].number, "PROC004") 
+
 
 # run the tests
 if __name__ == "__main__":
