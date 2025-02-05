@@ -8,7 +8,7 @@ def main():
     # Initializing the ProcedureManager object
     manager = ProcedureManager(PATH)
 
-    # quarter selection
+    # quarter selection (return 1, 2, 3 or 4)
     quarter = select_quarter()
 
     # Main loop of the program
@@ -20,6 +20,14 @@ def main():
             quarter = select_quarter()
             continue
 
+        # Automatic generation based on the least reviewed procedure
+        elif method == "auto":
+            print("to be implemented")
+            pass
+
+        elif method == "manual":
+            print("To be implemented")
+            pass
 
 if __name__ == "__main__":
     main()

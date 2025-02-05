@@ -41,9 +41,9 @@ def select_generation_method(quarter: int) -> str:
         selection = input("\nMenu selection:").strip()
 
         if selection == "1":
-            return "auto function"
+            return "auto"
         elif selection == "2":
-            return "manual function"
+            return "manual"
         elif selection == "3":
             return "back"
         elif selection == "4":
