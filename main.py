@@ -36,8 +36,8 @@ def main():
             number_procedure = len(months)
             procedures_selection = manager.select_procedures(number_procedure)
             
-            # display the menu
-            select_automatic_generation_menu(procedures_selection, quarter, months)
+            # display the menu and get the selection from the user
+            selection = select_automatic_generation_menu(procedures_selection, quarter, months)
 
         elif method == "manual":
             print("To be implemented")
