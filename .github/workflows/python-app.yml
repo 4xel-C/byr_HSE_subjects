@@ -14,8 +14,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install uv
+    - name: Install the latest version of uv
       uses: astral-sh/setup-uv@v5
+      with:
+        version: "latest"
 
     - name: Install dependencies
       run: |
