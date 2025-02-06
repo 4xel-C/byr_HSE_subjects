@@ -14,17 +14,15 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Install the latest version of uv
-      uses: astral-sh/setup-uv@v5
-      with:
-        version: "latest"
-
-
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python3 -
+        echo "$HOME/.local/bin" >> $GITHUB_PATH  
+      
     - name: Install dependencies
       run: |
-        echo "$HOME/.local/bin" >> $GITHUB_PATH
-        run: uv sync
+        poetry install
 
     - name: Run tests
       run: |
-        python -m unittest discover  
+        poetry run python -m unittest discover  # Utilisez poetry pour exécuter les tests
