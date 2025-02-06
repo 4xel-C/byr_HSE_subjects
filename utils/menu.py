@@ -101,6 +101,32 @@ def select_automatic_generation_menu(procedures: list[Procedure], quarter: int, 
         else: 
             return options[selection]
         
-        
+
+def manual_selection_procedure_menu(procedures: list[Procedure]) -> str:
+    """Recieve a list of procedure as an argument and diisplay all the procedure sorted by last review date.
+    Return the index of the selected procedure by the user."""
     
-    # console.print("4 - Exit the application")
+    console.print(f"\n[bold green]=== Select the new procedure ===")    
+    
+    options = {}
+    
+    for i, proc in enumerate(procedures):
+   
+        console.print(f"{i+1} - [bold blue]{proc.number}[/bold blue] - [bold]{proc.title}[/bold] - Last review date: {proc.last_review.strftime("%Y-%m")}")
+        
+        # Gather all the options for the user input and map them to the correct procedure index in the procedures list.
+        options[str(i+1)] = f"{i}"
+    
+    print("----------------------------")
+        
+    # Adding the back option
+    console.print(f"{len(options) + 1} - Back")
+    options[str(len(options) + 1)] = "back"
+    
+    while True:
+        selection = input("\nYour selection: ").strip()
+        
+        if selection not in options:
+            console.print("[red]Invalid selection. Please retry.")
+        else: 
+            return options[selection]

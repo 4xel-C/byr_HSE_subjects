@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from datetime import datetime
 from openpyxl import Workbook
 
-from utils import select_quarter, select_generation_method, select_automatic_generation_menu, ProcedureManager, Procedure
+from utils import select_quarter, select_generation_method, select_automatic_generation_menu, manual_selection_procedure_menu, ProcedureManager, Procedure
 
 class TestMenuSelection(unittest.TestCase):
     
@@ -108,6 +108,21 @@ class TestMenuSelection(unittest.TestCase):
         with self.assertRaises(SystemExit):
             select_automatic_generation_menu(procedures, quarter, months)
             
+    # ------------------------------- Manual method menu
+    
+    @patch("builtins.input", side_effect=["1"])
+    def test_select_manual_generation_menu(self, mock_input):
+        
+        procedures = [
+            Procedure(number="PROC001", part=1, title="Test title", ignored=False),
+            Procedure(number="PROC002", part=1, title="Test title2", ignored=False),
+            Procedure(number="PROC003", part=1, title="Test title3", ignored=False)
+            ]
+
+        selection = manual_selection_procedure_menu(procedures)
+        
+        self.assertEqual(selection, "0")
+            
 class TestProcedure(unittest.TestCase):
     
     # Testing initializing procedure object
@@ -188,7 +203,7 @@ class TestProcedureManager(unittest.TestCase):
         self.assertEqual(manager.procedures[4].last_review, datetime(2022, 9, 1, 0, 0))
 
     @patch('utils.procedures.load_workbook')
-    def test_select_procedure(self, mock_load_workbook):
+    def test_get_procedure_3(self, mock_load_workbook):
         
         # Two 'load_workbook' function are called when instanciating the ProcedureManager: 1 to load the procedures, the other, the history.
         mock_load_workbook.side_effect = [self.mock_workbook_proc, self.mock_workbook_history]
@@ -196,7 +211,7 @@ class TestProcedureManager(unittest.TestCase):
         # Initialize ProcedureManager
         manager = ProcedureManager(path='/fake/path/')
 
-        selected = manager.select_procedures()
+        selected = manager.get_procedures(3)
 
         self.assertEqual(len(selected), 3)
 
@@ -210,7 +225,7 @@ class TestProcedureManager(unittest.TestCase):
         self.assertEqual(selected[2].number, "PROC002")  
 
     @patch('utils.procedures.load_workbook')
-    def test_select_procedure_2(self, mock_load_workbook):
+    def test_get_procedure_2(self, mock_load_workbook):
         
         # Two 'load_workbook' function are called when instanciating the ProcedureManager: 1 to load the procedures, the other, the history.
         mock_load_workbook.side_effect = [self.mock_workbook_proc, self.mock_workbook_history]
@@ -218,7 +233,7 @@ class TestProcedureManager(unittest.TestCase):
         # Initialize ProcedureManager
         manager = ProcedureManager(path='/fake/path/')
 
-        selected = manager.select_procedures(2)
+        selected = manager.get_procedures(2)
 
         self.assertEqual(len(selected), 2)
 
@@ -228,6 +243,27 @@ class TestProcedureManager(unittest.TestCase):
         # Check the 3 older procedures
         self.assertEqual(selected[0].number, "PROC003")  
         self.assertEqual(selected[1].number, "PROC004") 
+        
+    @patch('utils.procedures.load_workbook')
+    def test_get_procedure_all(self, mock_load_workbook):
+        
+        # Two 'load_workbook' function are called when instanciating the ProcedureManager: 1 to load the procedures, the other, the history.
+        mock_load_workbook.side_effect = [self.mock_workbook_proc, self.mock_workbook_history]
+        
+        # Initialize ProcedureManager
+        manager = ProcedureManager(path='/fake/path/')
+
+        selected = manager.get_procedures()
+
+        self.assertEqual(len(selected), len(manager.procedures))
+
+        # Check if there are sorted by data
+        self.assertLessEqual(selected[0].last_review, selected[1].last_review)
+
+        # Check the 3 older procedures
+        self.assertEqual(selected[0].number, "PROC003")  
+        self.assertEqual(selected[1].number, "PROC004") 
+
 
 
 # run the tests

@@ -53,11 +53,12 @@ class ProcedureManager:
         return
 
 
-    def select_procedures(self, n=3) -> list[Procedure]:
-        """Select n random procedures among the oldest review"""
+    def get_procedures(self, n=None) -> list[Procedure]:
+        """Select n procedures sorted by date from the oldest to the newest.
+        If no n is passed through the function, return all the procedures"""
         procedures = sorted(self.procedures, key = lambda x: x.last_review)
 
         # return the n first procedures
-        return procedures[:n]
+        return procedures[:n] if n else procedures
 
         
