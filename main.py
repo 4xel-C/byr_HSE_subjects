@@ -1,7 +1,15 @@
-from utils import ProcedureManager, select_quarter, select_generation_method
+from utils import ProcedureManager, select_quarter, select_generation_method, select_automatic_generation_menu
 
 # Path to the DATA folder containing the procedures list, the history and templates
 PATH = "data/"
+
+# Match the quarter number (QX) to the corresponding month
+MONTH = {
+    1: ["January", "February", "March"],
+    2: ["April", "May", "June"],
+    3: ["July/August", "September"],
+    4: ["October", "November", "December"],
+}
 
 
 def main():
@@ -22,8 +30,14 @@ def main():
 
         # Automatic generation based on the least reviewed procedure
         elif method == "auto":
-            print("to be implemented")
-            pass
+
+            # If the 3rd quarter was selected, only select 2 procedures (Only 2 procedures reviewed during summer)
+            months = MONTH[quarter]
+            number_procedure = len(months)
+            procedures_selection = manager.select_procedures(number_procedure)
+            
+            # display the menu
+            select_automatic_generation_menu(procedures_selection, quarter, months)
 
         elif method == "manual":
             print("To be implemented")

@@ -1,4 +1,5 @@
 from rich.console import Console
+from .procedures import Procedure
 
 # initializing the console for rich text
 console = Console()
@@ -40,15 +41,66 @@ def select_generation_method(quarter: int) -> str:
     while True:
         selection = input("\nMenu selection:").strip()
 
-        if selection == "1":
-            return "auto"
-        elif selection == "2":
-            return "manual"
-        elif selection == "3":
-            return "back"
-        elif selection == "4":
+        match selection:
+            case "1":
+                return "auto"
+            case "2":
+                return "manual"
+            case "3":
+                return "back"
+            case "4":
+                exit("Exiting the application")
+            case _:
+                console.print(
+                    "[red]Invalid selection. Please enter a number between 1 and 3"
+                )
+
+def select_automatic_generation_menu(procedures: list[Procedure], quarter: int, months: [list]) -> str:
+    """Display the menu after choosing the selection method for the procedure:
+    Display the proposed procedures for each month and propose and edition / validation menu.
+    Take as input a list of procedures to display, the selected quarter, and the list of month.
+    Return the user menu selection."""
+    
+    console.print(f"\n[bold green]=== Proposed Selection for Q{quarter} ===")
+    console.print(f"\nSelect the procedure you want to edit or confirm the selection\n")
+
+    options = {}
+    
+    for i, proc in enumerate(procedures):
+        
+        month_string = months[i]
+        
+        console.print(f"{i+1} - [bold blue]{month_string}[/bold blue] - [bold]{proc.number}[/bold] : {proc.title}")
+        
+        # Gather all the options for the user input and map them to the correct procedure index in the procedures list.
+        options[str(i+1)] = f"{i}"
+    
+    print("----------------------------")
+        
+    # Adding the accept option
+    console.print(f"{len(options) + 1} - Confirm selection")
+    options[str(len(options) + 1)] = "confirm"
+    
+    # Adding the back option
+    console.print(f"{len(options) + 1} - Choose another method")
+    options[str(len(options) + 1)] = "back"
+
+    # Adding the close application option
+    console.print(f"{len(options) + 1} - Exit the application")
+    options[str(len(options) + 1)] = "exit"
+    
+    while True:
+        selection = input("\nYour selection: ").strip()
+        
+        if selection not in options:
+            console.print("[red]Invalid selection. Please retry.")
+            
+        elif options[selection] == "exit":
             exit("Exiting the application")
-        else:
-            console.print(
-                "[red]Invalid selection. Please enter a number between 1 and 3"
-            )
+        
+        else: 
+            return options[selection]
+        
+        
+    
+    # console.print("4 - Exit the application")
