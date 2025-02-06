@@ -17,7 +17,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
-        python-version: '3.13'  # Remplacez par la version de Python que vous utilisez
+        python-version: '3.13' 
 
     - name: Install UV
       run: |
