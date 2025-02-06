@@ -1,8 +1,74 @@
+from datetime import datetime
+import os
 from rich.console import Console
-from .procedures import Procedure
+from .procedures import Procedure, ProcedureManager
 
 # initializing the console for rich text
 console = Console()
+
+# Menu definitions
+MENUS = {
+    "main": {
+        "1": ("Automatic procedure selection", "auto"),
+        "2": ("Manual procedure selection", "manual"),
+        "3": ("View procedures list", "procedures"),
+        "4": ("Quit", "exit")
+    },
+}
+
+# Match the quarter number (QX) to the corresponding month
+MONTH = {
+    1: ["January", "February", "March"],
+    2: ["April", "May", "June"],
+    3: ["July/August", "September"],
+    4: ["October", "November", "December"],
+}
+
+
+def display_menu(menu: str) -> None:
+
+    if menu == "auto":
+        pass
+
+    elif menu == "manual":
+        pass
+
+    else:
+        console.print("\n[bold green]=== Main Menu ===") 
+        print()
+        for key, (desc, _) in MENUS[menu].items():
+                console.print(f"{key}. {desc}")
+
+
+def display_procedures_menu(procedures: list[Procedure], quarter: int):
+    console.print("\n[bold green]=== Proposed Selection for Q{quarter} ===")
+    console.print("\nSelect the procedure you want to edit or confirm the selection\n")
+
+    months = MONTH[quarter]
+    options = {}
+    
+    for i, proc in enumerate(procedures):
+        
+        month_string = months[i]
+        
+        console.print(f"{i+1} - [bold blue]{month_string}[/bold blue] - [bold]{proc.number}[/bold] : {proc.title}")
+        
+        # Gather all the options for the user input and map them to the correct procedure index in the procedures list.
+        options[str(i+1)] = f"{i}"
+
+    print("----------------------------")
+        
+    # Adding the accept option
+    console.print(f"{len(options) + 1} - Confirm selection")
+    options[str(len(options) + 1)] = "confirm"
+    
+    # Adding the back option
+    console.print(f"{len(options) + 1} - Choose another method")
+    options[str(len(options) + 1)] = "back"
+
+    # Adding the close application option
+    console.print(f"{len(options) + 1} - Exit the application")
+    options[str(len(options) + 1)] = "exit"
 
 
 # Starting menu function
@@ -25,108 +91,54 @@ def select_quarter() -> int:
 
         console.print("[red] Invalid selection. Please enter a number between 1 and 5")
 
+# Select procedures
+def select_procedures(manager: ProcedureManager, quarter: str = 1, auto: bool = False) -> list[Procedure]:
 
-# Main menu function
-def select_generation_method(quarter: int) -> str:
-    """Function to display the main menu to the user and manage his choice.
-    Parameter: quarter (int): selected in the 'select_quarter' function."""
+    if auto:
+        # number of procedures to get (1 by month)
+        n = len(MONTH[quarter])
 
-    console.print("\n[bold green]=== Main menu ===")
-    console.print(f"\nGenerate the discussion file for Q{quarter}: Choose an option\n")
-    console.print("1 - Generate the file automaticly")
-    console.print("2 - Cherry pick each procedure")
-    console.print("3 - Choose another quarter")
-    console.print("4 - Exit the application")
+        # get the sorted procedures
+        return manager.get_procedures(n)
 
-    while True:
-        selection = input("\nMenu selection:").strip()
+    else:
+        procedures = manager.get_procedures()
 
-        match selection:
-            case "1":
-                return "auto"
-            case "2":
-                return "manual"
-            case "3":
-                return "back"
-            case "4":
-                exit("Exiting the application")
-            case _:
-                console.print(
-                    "[red]Invalid selection. Please enter a number between 1 and 3"
-                )
-
-def select_automatic_generation_menu(procedures: list[Procedure], quarter: int, months: list) -> str:
-    """Display the menu after choosing the selection method for the procedure:
-    Display the proposed procedures for each month and propose and edition / validation menu.
-    Take as input a list of procedures to display, the selected quarter, and the list of month.
-    Return the user menu selection."""
-    
-    console.print(f"\n[bold green]=== Proposed Selection for Q{quarter} ===")
-    console.print(f"\nSelect the procedure you want to edit or confirm the selection\n")
-
-    options = {}
-    
-    for i, proc in enumerate(procedures):
+        # Display the procedure and input the user for a choice
+        # Clear the terminal
+        os.system("cls" if os.name == "nt" else "clear")
+        for i, proc in enumerate(procedures):
+            console.print(f"{i+1} - [blue]Last review: {proc.last_review.strftime("%Y-%m")}[/blue] - [bold]{proc.number}[/bold] : {proc.title}")
         
-        month_string = months[i]
+        console.print(f"{len(procedures) + 1} - [bold red]Cancel")
         
-        console.print(f"{i+1} - [bold blue]{month_string}[/bold blue] - [bold]{proc.number}[/bold] : {proc.title}")
-        
-        # Gather all the options for the user input and map them to the correct procedure index in the procedures list.
-        options[str(i+1)] = f"{i}"
-    
-    print("----------------------------")
-        
-    # Adding the accept option
-    console.print(f"{len(options) + 1} - Confirm selection")
-    options[str(len(options) + 1)] = "confirm"
-    
-    # Adding the back option
-    console.print(f"{len(options) + 1} - Choose another method")
-    options[str(len(options) + 1)] = "back"
-
-    # Adding the close application option
-    console.print(f"{len(options) + 1} - Exit the application")
-    options[str(len(options) + 1)] = "exit"
-    
-    while True:
-        selection = input("\nYour selection: ").strip()
-        
-        if selection not in options:
-            console.print("[red]Invalid selection. Please retry.")
+        while True:
+            try:
+                choice = int(input("\nSelect a replacement procedure: "))
+                if not (0 < choice <= len(procedures) + 1):
+                    raise ValueError
+            except (ValueError, TypeError):
+                console.print("[red]Bad input!")
+                continue
             
-        elif options[selection] == "exit":
-            exit("Exiting the application")
+            if choice == len(procedures) + 1:
+                return []
+            else:
+                return [procedures[choice-1]]
         
-        else: 
-            return options[selection]
-        
-
-def manual_selection_procedure_menu(procedures: list[Procedure]) -> str:
-    """Recieve a list of procedure as an argument and diisplay all the procedure sorted by last review date.
-    Return the index of the selected procedure by the user."""
-    
-    console.print(f"\n[bold green]=== Select the new procedure ===")    
-    
-    options = {}
-    
+def display_all_procedures(manager: ProcedureManager):
+    procedures = manager.get_procedures()
     for i, proc in enumerate(procedures):
-   
-        console.print(f"{i+1} - [bold blue]{proc.number}[/bold blue] - [bold]{proc.title}[/bold] - Last review date: {proc.last_review.strftime("%Y-%m")}")
-        
-        # Gather all the options for the user input and map them to the correct procedure index in the procedures list.
-        options[str(i+1)] = f"{i}"
-    
-    print("----------------------------")
-        
-    # Adding the back option
-    console.print(f"{len(options) + 1} - Back")
-    options[str(len(options) + 1)] = "back"
-    
-    while True:
-        selection = input("\nYour selection: ").strip()
-        
-        if selection not in options:
-            console.print("[red]Invalid selection. Please retry.")
-        else: 
-            return options[selection]
+            row = f"{i+1:<2} - "
+
+            num = f"[bold]{proc.number:<}[/bold]"
+            title = proc.title
+            
+            if proc.last_review == datetime.min:
+                last_review = "[blue]Last review: [bold]Never[/blue]"
+            else:
+                last_review = f"[blue]Last review: {proc.last_review.strftime("%Y-%m")}[/blue]"
+
+            row = row + num + " - " + title + " - " + last_review
+
+            console.print(row)

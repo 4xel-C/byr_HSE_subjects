@@ -1,83 +1,103 @@
-from utils import ProcedureManager, select_quarter, select_generation_method, select_automatic_generation_menu, manual_selection_procedure_menu
+from utils import ProcedureManager, select_quarter, display_menu, select_procedures, display_procedures_menu, display_all_procedures, MENUS, MONTH
+import os
 
 # Path to the DATA folder containing the procedures list, the history and templates
 PATH = "data/"
 
-# Match the quarter number (QX) to the corresponding month
-MONTH = {
-    1: ["January", "February", "March"],
-    2: ["April", "May", "June"],
-    3: ["July/August", "September"],
-    4: ["October", "November", "December"],
-}
-
-
 def main():
+
     # Initializing the ProcedureManager object
-    manager = ProcedureManager(PATH)
+    proc_manager = ProcedureManager(PATH)
 
-    # quarter selection (return 1, 2, 3 or 4)
-    quarter = select_quarter()
-    
-    # Initialize the method variable that will recieve the method to apply1
-    method = ""
-    procedures_selection = None
+    # Stack of actives menus
+    stack = ["main"]
 
-    # Main loop of the program
-    while True:
+    while stack:
+        os.system("cls" if os.name == "nt" else "clear")
+        current_menu = stack[-1]
+
+        if current_menu == "main":
+            display_menu(current_menu)
         
-        # Initialize the variables used for the loop
-        months = MONTH[quarter]
-        number_procedure = len(months)
-        
-        if not method:
-            method = select_generation_method(quarter)
+        elif current_menu == "exit":
+            quit("Closing the application.")
+            
+        elif current_menu == "procedures":
+            display_all_procedures(proc_manager)
+            input("Press any key to return to main menu")
+            stack.pop()
+            continue
 
-        # Return to the quarter selection menu
-        if method == "back":
-            method = None
+        elif current_menu == "auto":
             quarter = select_quarter()
+            
+            # select procedures automaticly and go to selection menu
+            procedures = select_procedures(proc_manager, quarter, auto=True)
+            stack.append("validation")
             continue
 
-        # --------------------------------Automatic generation based on the least reviewed procedure
-        elif method == "auto":
-            
-            # Procédures selected for the document
-            if not procedures_selection:
-                procedures_selection = manager.get_procedures(number_procedure)
-            
-            # display the menu and get the selection from the user
-            selection_to_change = select_automatic_generation_menu(procedures_selection, quarter, months)          
-            
-            if selection_to_change == "back":
+        elif current_menu == "manual":
+            quarter = select_quarter()
+            procedures = list()
 
-                # Reinitialize the variables
-                method = None
-                procedures_selection = None
+            # For each month of the quarter, prompt the user to choose a procedure
+            for _ in range(len(MONTH[quarter])):
+                selection = select_procedures(proc_manager)
+
+                # if user choose cancel (empty return, go back to the previous menu)
+                if not selection:
+                    break
+
+                procedures.append(selection[0])
+
+            if len(procedures) != len(MONTH[quarter]):
+                stack.pop()
                 continue
             
-            elif selection_to_change == "confirm":
-                print("TO BE IMPLEMENTED")
-                continue
-            
-            # If user want to edit one specific procedure
-            else:
-                all_procedures_list = manager.get_procedures()
-                procedure_replacement_index = manual_selection_procedure_menu(all_procedures_list)
-                
-                # if user choose to back without modifying a procedure
-                if procedure_replacement_index == 'back':
-                    continue
-                
-                # replace the desired procedure by the new selection
-                procedures_selection[int(selection_to_change)] = all_procedures_list[int(procedure_replacement_index)]
-                continue
-                
-        # ----------------------------------------- Manual generation of procedures
-        elif method == "manual":
-            print("To be implemented")
-            method= None
+            stack.append("validation")
             continue
+
+            
+        elif current_menu == "validation":
+            display_procedures_menu(procedures, quarter)
+
+            try:
+                choice = int(input("Select your option: ").strip())
+                if not 0 < choice <= len(procedures) + 3:
+                    raise ValueError
+            except (ValueError, TypeError):
+                continue
+
+            if 0 < choice <= len(procedures):
+                replacement = select_procedures(proc_manager)
+                if replacement:
+                    procedures[choice-1] = replacement[0]
+                continue
+            
+            # Choice confirmation
+            elif choice == len(procedures)+1:
+                stack.append("confirm")
+
+            # choice "choose another method"
+            elif choice == len(procedures)+2:
+                stack.pop()
+                stack.pop()
+                continue
+
+            # choice "exit"
+            elif choice == len(procedures)+3:
+                stack.append("exit")
+                continue
+
+        elif current_menu == "confirm":
+            input("TO BE IMPLEMENTED")
+            stack.pop()
+            continue
+
+        choice = input().strip()
+
+        if choice in MENUS[current_menu]:
+            stack.append(MENUS[current_menu][choice][1])
 
 if __name__ == "__main__":
     main()
