@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 from datetime import datetime
 from openpyxl import Workbook
 
-from utils import select_quarter, select_generation_method, ProcedureManager, Procedure
+from utils import select_quarter, select_generation_method, select_automatic_generation_menu, ProcedureManager, Procedure
 
 class TestMenuSelection(unittest.TestCase):
     
@@ -42,6 +42,71 @@ class TestMenuSelection(unittest.TestCase):
     def test_select_generation_method_exit(self, mock_input):
         with self.assertRaises(SystemExit):
             select_generation_method(1)
+            
+    # -------------------------------------------------selection automatic generation test
+    @patch("builtins.input", side_effect=["1"])
+    def test_select1_automatic_generation_menu(self, mock_input):
+        
+        procedures = [
+            Procedure(number="PROC001", part=1, title="Test title", ignored=False),
+            Procedure(number="PROC002", part=1, title="Test title2", ignored=False),
+            Procedure(number="PROC003", part=1, title="Test title3", ignored=False)
+            ]
+        
+        months = ["January", "February", "March"]
+        
+        quarter = 1
+        
+        selection = select_automatic_generation_menu(procedures, quarter, months)
+        self.assertEqual(selection, "0")
+        
+    @patch("builtins.input", side_effect=["3"])
+    def test_select3_automatic_generation_menu(self, mock_input):
+        
+        procedures = [
+            Procedure(number="PROC001", part=1, title="Test title", ignored=False),
+            Procedure(number="PROC002", part=1, title="Test title2", ignored=False),
+            Procedure(number="PROC003", part=1, title="Test title3", ignored=False)
+            ]
+        
+        months = ["January", "February", "March"]
+        
+        quarter = 1
+        
+        selection = select_automatic_generation_menu(procedures, quarter, months)
+        self.assertEqual(selection, "2")
+    
+    @patch("builtins.input", side_effect=["4"])
+    def test_select_confirm_automatic_generation_menu(self, mock_input):
+        
+        procedures = [
+            Procedure(number="PROC001", part=1, title="Test title", ignored=False),
+            Procedure(number="PROC002", part=1, title="Test title2", ignored=False),
+            Procedure(number="PROC003", part=1, title="Test title3", ignored=False)
+            ]
+        
+        months = ["January", "February", "March"]
+        
+        quarter = 1
+        
+        selection = select_automatic_generation_menu(procedures, quarter, months)
+        self.assertEqual(selection, "confirm")
+        
+    @patch("builtins.input", side_effect=["6"])
+    def test_select_exit_automatic_generation_menu(self, mock_input):
+        
+        procedures = [
+            Procedure(number="PROC001", part=1, title="Test title", ignored=False),
+            Procedure(number="PROC002", part=1, title="Test title2", ignored=False),
+            Procedure(number="PROC003", part=1, title="Test title3", ignored=False)
+            ]
+        
+        months = ["January", "February", "March"]
+        
+        quarter = 1
+        
+        with self.assertRaises(SystemExit):
+            select_automatic_generation_menu(procedures, quarter, months)
             
 class TestProcedure(unittest.TestCase):
     

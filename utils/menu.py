@@ -55,7 +55,7 @@ def select_generation_method(quarter: int) -> str:
                     "[red]Invalid selection. Please enter a number between 1 and 3"
                 )
 
-def select_automatic_generation_menu(procedures: list[Procedure], quarter: int, months: [list]) -> str:
+def select_automatic_generation_menu(procedures: list[Procedure], quarter: int, months: list) -> str:
     """Display the menu after choosing the selection method for the procedure:
     Display the proposed procedures for each month and propose and edition / validation menu.
     Take as input a list of procedures to display, the selected quarter, and the list of month.
