@@ -19,8 +19,10 @@ jobs:
       with:
         version: "latest"
 
+
     - name: Install dependencies
       run: |
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
         run: uv sync
 
     - name: Run tests
