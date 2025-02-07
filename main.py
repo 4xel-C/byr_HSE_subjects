@@ -1,13 +1,10 @@
-from utils import ProcedureManager, select_quarter, display_menu, select_procedures, display_procedures_menu, display_all_procedures, MENUS, MONTH
+from utils import ProcedureManager, select_quarter, display_menu, select_procedures, display_procedures_menu, display_all_procedures, MENUS, MONTH, console
 import os
 
-# Path to the DATA folder containing the procedures list, the history and templates
-PATH = "data/"
-
 def main():
-
+    
     # Initializing the ProcedureManager object
-    proc_manager = ProcedureManager(PATH)
+    proc_manager = ProcedureManager()
 
     # Stack of actives menus
     stack = ["main"]
@@ -82,6 +79,7 @@ def main():
             # Choice confirmation
             elif choice == len(procedures)+1:
                 stack.append("confirm")
+                continue
 
             # choice "choose another method"
             elif choice == len(procedures)+2:
@@ -96,8 +94,10 @@ def main():
         
         # Confirmation menu after confirming the selection
         elif current_menu == "confirm":
-            input("TO BE IMPLEMENTED")
-            stack.pop()
+            proc_manager.write_document(procedures, quarter)
+            console.print("[green]Your Word file has been generated!")
+            input("\nPress any key to exit the application")
+            stack.append("exit")
             continue
 
         choice = input().strip()

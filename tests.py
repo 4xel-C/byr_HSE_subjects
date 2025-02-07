@@ -247,7 +247,7 @@ class TestProcedureManager(unittest.TestCase):
         
 
         # Initialize ProcedureManager
-        manager = ProcedureManager(path='/fake/path/')
+        manager = ProcedureManager()
 
         # Check if procedure are correctly charged
         self.assertEqual(manager.procedures[0].number, "PROC001")
@@ -267,7 +267,7 @@ class TestProcedureManager(unittest.TestCase):
         mock_load_workbook.side_effect = [self.mock_workbook_proc, self.mock_workbook_history]
         
         # Initialize ProcedureManager
-        manager = ProcedureManager(path='/fake/path/')
+        manager = ProcedureManager()
         
         # Check if dictionnary has been correctly created
         self.assertEqual(manager.procedures[0].last_review, datetime(2022, 8, 1, 0, 0)) 
@@ -283,7 +283,7 @@ class TestProcedureManager(unittest.TestCase):
         mock_load_workbook.side_effect = [self.mock_workbook_proc, self.mock_workbook_history]
         
         # Initialize ProcedureManager
-        manager = ProcedureManager(path='/fake/path/')
+        manager = ProcedureManager()
 
         selected = manager.get_procedures(3)
 
@@ -305,7 +305,7 @@ class TestProcedureManager(unittest.TestCase):
         mock_load_workbook.side_effect = [self.mock_workbook_proc, self.mock_workbook_history]
         
         # Initialize ProcedureManager
-        manager = ProcedureManager(path='/fake/path/')
+        manager = ProcedureManager()
 
         selected = manager.get_procedures(2)
 
@@ -325,7 +325,7 @@ class TestProcedureManager(unittest.TestCase):
         mock_load_workbook.side_effect = [self.mock_workbook_proc, self.mock_workbook_history]
         
         # Initialize ProcedureManager
-        manager = ProcedureManager(path='/fake/path/')
+        manager = ProcedureManager()
 
         selected = manager.get_procedures()
 

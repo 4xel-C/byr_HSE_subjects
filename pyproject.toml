@@ -6,5 +6,6 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "openpyxl>=3.1.5",
+    "python-docx>=1.1.2",
     "rich>=13.9.4",
 ]

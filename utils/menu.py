@@ -6,6 +6,8 @@ from .procedures import Procedure, ProcedureManager
 # initializing the console for rich text
 console = Console()
 
+from .config import MONTH
+
 # Main menu definitions (can be implemented to add sub menus using the stack to navigate)
 MENUS = {
     "main": {
@@ -14,14 +16,6 @@ MENUS = {
         "3": ("View procedures list", "procedures"),
         "4": ("Quit", "exit")
     },
-}
-
-# Match the quarter number (QX) to the corresponding month
-MONTH = {
-    1: ["January", "February", "March"],
-    2: ["April", "May", "June"],
-    3: ["July/August", "September"],
-    4: ["October", "November", "December"],
 }
 
 
