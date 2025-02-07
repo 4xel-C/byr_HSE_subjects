@@ -68,7 +68,7 @@ After proposing the procedures for review, the program lets the user edit the se
    ```
 
 ## Processus and details
-The algorithm work using a **stack** menu logic: 
+The algorithm works using a **stack** menu logic: 
 - Allowing the menu exploration by implementation of a 'FIFO' (First In First Out' Data structure where the last element become the actual visited menu.
 - The computing logic of each menu is then separated by `if` statements using the last element of the *stack menu*.
 - The *backing* option is managed by poping out the last element of the pile, letting the previous one beeiong the new menu considered.
