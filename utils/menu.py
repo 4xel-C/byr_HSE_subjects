@@ -74,8 +74,32 @@ def display_procedures_menu(procedures: list[Procedure], quarter: int):
     console.print(f"{len(options) + 1} - Exit the application")
     options[str(len(options) + 1)] = "exit"
 
+       
+def display_all_procedures(manager: ProcedureManager):
+    """Method to display all procedures for the procedures menu (View procedures list selection.)
 
-# Starting menu function
+    Args:
+        manager (ProcedureManager): Need the ProcedureManager as input to manage all the loaded procedure.
+    """
+    
+    procedures = manager.get_procedures()
+    for i, proc in enumerate(procedures):
+            row = f"{i+1:<2} - "
+
+            num = f"[bold]{proc.number:<}[/bold]"
+            title = proc.title
+            
+            if proc.last_review == datetime.min:
+                last_review = "[blue]Last review: [bold]Never[/blue]"
+            else:
+                last_review = f"[blue]Last review: {proc.last_review.strftime("%Y-%m")}[/blue]"
+
+            row = row + num + " - " + title + " - " + last_review
+
+            console.print(row)
+
+# ------------------------------------------------------------------------------------------- Helper functions
+# Quarter selection function
 def select_quarter() -> int:
     """Quarter submenu to display the quarter selection after selecting a method.
 
@@ -99,6 +123,7 @@ def select_quarter() -> int:
             exit("Exiting the application")
 
         console.print("[red] Invalid selection. Please enter a number between 1 and 5")
+
 
 # Select procedures
 def select_procedures(manager: ProcedureManager, quarter: int = 1, auto: bool = False, iteration: int = None) -> list[Procedure]:
@@ -150,26 +175,3 @@ def select_procedures(manager: ProcedureManager, quarter: int = 1, auto: bool = 
                 return []
             else:
                 return [procedures[choice-1]]
-        
-def display_all_procedures(manager: ProcedureManager):
-    """Method to display all procedures for the procedures menu (View procedures list selection.)
-
-    Args:
-        manager (ProcedureManager): Need the ProcedureManager as input to manage all the loaded procedure.
-    """
-    
-    procedures = manager.get_procedures()
-    for i, proc in enumerate(procedures):
-            row = f"{i+1:<2} - "
-
-            num = f"[bold]{proc.number:<}[/bold]"
-            title = proc.title
-            
-            if proc.last_review == datetime.min:
-                last_review = "[blue]Last review: [bold]Never[/blue]"
-            else:
-                last_review = f"[blue]Last review: {proc.last_review.strftime("%Y-%m")}[/blue]"
-
-            row = row + num + " - " + title + " - " + last_review
-
-            console.print(row)

@@ -11,7 +11,7 @@ class Procedure:
     part: int  # Number of the part (If a long procedure is partionnated)
     title: str
     ignored: bool  # Check if the procedure has to be ignored.
-    last_review: datetime = datetime.min
+    last_review: datetime = datetime.min   # Date on which the procedure has been reviewed. Completed during the initialization of the procedureMager using the generatre_history() method.
 
 
 # Class to manage the procedures
