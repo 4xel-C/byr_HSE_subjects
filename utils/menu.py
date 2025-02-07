@@ -6,7 +6,7 @@ from .procedures import Procedure, ProcedureManager
 # initializing the console for rich text
 console = Console()
 
-# Menu definitions
+# Main menu definitions (can be implemented to add sub menus using the stack to navigate)
 MENUS = {
     "main": {
         "1": ("Automatic procedure selection", "auto"),
@@ -26,14 +26,11 @@ MONTH = {
 
 
 def display_menu(menu: str) -> None:
-
-    if menu == "auto":
-        pass
-
-    elif menu == "manual":
-        pass
-
-    else:
+    """Function to display a menu.
+    Args:
+        menu (str): menu title to disply"""
+        
+    if menu == "main":
         console.print("\n[bold green]=== Main Menu ===") 
         print()
         for key, (desc, _) in MENUS[menu].items():
@@ -41,7 +38,14 @@ def display_menu(menu: str) -> None:
 
 
 def display_procedures_menu(procedures: list[Procedure], quarter: int):
-    console.print("\n[bold green]=== Proposed Selection for Q{quarter} ===")
+    """Display the Validation procedure menu generated when all the procedure for the current quarter have been generated.
+
+    Args:
+        procedures (list[Procedure]): List of Procedure object.
+        quarter (int): The quarter for which the generation is applied.
+    """
+    
+    console.print(f"\n[bold green]=== Proposed Selection for Q{quarter} ===")
     console.print("\nSelect the procedure you want to edit or confirm the selection\n")
 
     months = MONTH[quarter]
@@ -73,7 +77,12 @@ def display_procedures_menu(procedures: list[Procedure], quarter: int):
 
 # Starting menu function
 def select_quarter() -> int:
-    """Starting menu function to display the quarter selection to the user and manage his choice."""
+    """Quarter submenu to display the quarter selection after selecting a method.
+
+    Returns:
+        int: return the user selection to match with the MONTH dictionnary constant.
+    """
+    
     console.print("\n[bold green]-----Choose the quarter-----\n")
     console.print("1--Q1 (Jan - Mar)")
     console.print("2--Q2 (Apr - Jun)")
@@ -92,7 +101,19 @@ def select_quarter() -> int:
         console.print("[red] Invalid selection. Please enter a number between 1 and 5")
 
 # Select procedures
-def select_procedures(manager: ProcedureManager, quarter: str = 1, auto: bool = False) -> list[Procedure]:
+def select_procedures(manager: ProcedureManager, quarter: int = 1, auto: bool = False, iteration: int = None) -> list[Procedure]:
+    """Function to display a procedure selection menu, used in the manual selection method, or in the procedure edition process on the confirmation menu. 
+    Also used in the automatic selection to select the least reviewed procedure by the month concerned by the desired quarter.
+
+    Args:
+        manager (ProcedureManager): ProcedureManager object to get all the procedures sorted and loaded by the program.
+        quarter (int, optional): Quarter considered. Defaults to 1.
+        auto (bool, optional): Decide if the selection should be automatic or manual by the user. Defaults to False.
+        iteration (int, optional): Can pass an iteration number to iterated through the deffirent MONTH or the quarter during the manual selection method. Defaults to None.
+        
+    Returns:
+        list[Procedure]: Return a list of the selected procedures. If only 1 procedure is selected during the manual method, return a list with 1 procedure.
+    """
 
     if auto:
         # number of procedures to get (1 by month)
@@ -107,6 +128,10 @@ def select_procedures(manager: ProcedureManager, quarter: str = 1, auto: bool = 
         # Display the procedure and input the user for a choice
         # Clear the terminal
         os.system("cls" if os.name == "nt" else "clear")
+        
+        # If method called multiple times, provide the month detail
+        if iteration is not None:
+            console.print(f"\n[bold green]=== Select a procedure for {MONTH[quarter][iteration]} ===")
         for i, proc in enumerate(procedures):
             console.print(f"{i+1} - [blue]Last review: {proc.last_review.strftime("%Y-%m")}[/blue] - [bold]{proc.number}[/bold] : {proc.title}")
         
@@ -127,6 +152,12 @@ def select_procedures(manager: ProcedureManager, quarter: str = 1, auto: bool = 
                 return [procedures[choice-1]]
         
 def display_all_procedures(manager: ProcedureManager):
+    """Method to display all procedures for the procedures menu (View procedures list selection.)
+
+    Args:
+        manager (ProcedureManager): Need the ProcedureManager as input to manage all the loaded procedure.
+    """
+    
     procedures = manager.get_procedures()
     for i, proc in enumerate(procedures):
             row = f"{i+1:<2} - "

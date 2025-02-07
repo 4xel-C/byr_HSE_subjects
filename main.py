@@ -16,18 +16,22 @@ def main():
         os.system("cls" if os.name == "nt" else "clear")
         current_menu = stack[-1]
 
+        # Main starting menu
         if current_menu == "main":
             display_menu(current_menu)
         
+        # exit menu to quit the application
         elif current_menu == "exit":
             quit("Closing the application.")
             
+        # Procedures menu to display all procedures
         elif current_menu == "procedures":
             display_all_procedures(proc_manager)
             input("Press any key to return to main menu")
             stack.pop()
             continue
 
+        # Automatic method selection of the procedures based on the least reviewed procedures
         elif current_menu == "auto":
             quarter = select_quarter()
             
@@ -36,13 +40,14 @@ def main():
             stack.append("validation")
             continue
 
+        # Manual method selection
         elif current_menu == "manual":
             quarter = select_quarter()
             procedures = list()
 
             # For each month of the quarter, prompt the user to choose a procedure
-            for _ in range(len(MONTH[quarter])):
-                selection = select_procedures(proc_manager)
+            for i in range(len(MONTH[quarter])):
+                selection = select_procedures(proc_manager, quarter=quarter, iteration=i)
 
                 # if user choose cancel (empty return, go back to the previous menu)
                 if not selection:
@@ -57,7 +62,7 @@ def main():
             stack.append("validation")
             continue
 
-            
+        # Validation menu to confirm the selection of the procedures for the corresponding quarter
         elif current_menu == "validation":
             display_procedures_menu(procedures, quarter)
 
@@ -88,7 +93,8 @@ def main():
             elif choice == len(procedures)+3:
                 stack.append("exit")
                 continue
-
+        
+        # Confirmation menu after confirming the selection
         elif current_menu == "confirm":
             input("TO BE IMPLEMENTED")
             stack.pop()
