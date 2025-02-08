@@ -1,4 +1,4 @@
-from utils import ProcedureManager, select_quarter, display_menu, select_procedures, display_procedures_menu, display_all_procedures, MENUS, MONTH, console
+from utils import ProcedureManager, select_quarter, display_menu, select_procedures, display_procedures_menu, display_all_procedures, MENUS, MONTH, console, want_retry
 import os
 
 def main():
@@ -94,12 +94,35 @@ def main():
         
         # Confirmation menu after confirming the selection
         elif current_menu == "confirm":
-            proc_manager.write_document(procedures, quarter)
-            console.print("[green]Your Word file has been generated!")
-            input("\nPress any key to exit the application")
-            stack.append("exit")
-            continue
 
+            # Write the document
+            is_writted = proc_manager.write_document(procedures, quarter)
+            if is_writted:
+                console.print("[green]Your Word file has been generated!")
+                input("Press enter to update history file")
+            else:
+                console.print("[red]File couldn't have been created!")
+                if want_retry():
+                    continue
+                else:
+                    stack.append("exit")
+                    continue
+            
+            # Update the hisotry file:
+            is_updated = proc_manager.update_history_file(procedures, quarter)
+            if is_updated:
+                console.print("[green]The history has been [bold]Updated[/bold]!")
+                input("\nPress any key to exit the application")
+                stack.append("exit")
+            else:
+                console.print("[red]History couldn't have been updated!")
+                if want_retry():
+                    continue
+                else:
+                    stack.append("exit")
+                    continue
+
+        # use the menu dictionary to update the menu selection
         choice = input().strip()
 
         if choice in MENUS[current_menu]:
@@ -107,3 +130,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+

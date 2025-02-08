@@ -7,8 +7,9 @@
 - [x] Enable priority selection of newly added procedures that have never appeared in the archive.  
 - [x] Enable cherry picking when reviewing the selection.
 - [x] Enable procedure checking to make sure no procedure are forgotten.
-- [ ] Implement The word file generation
-- [ ] Implement The update of the history list
+- [x] Implement The word file generation
+- [x] Implement The update of the history list
+- [ ] Correction of a bug while loading the application where the history saves the new dates as string and not Date object.
 
 
 # Automation of Subject Generation for HSE Discussions  
@@ -69,9 +70,9 @@ After proposing the procedures for review, the program lets the user edit the se
 
 ## Processus and details
 The algorithm works using a **stack** menu logic: 
-- Allowing the menu exploration by implementation of a 'FIFO' (First In First Out' Data structure where the last element become the actual visited menu.
-- The computing logic of each menu is then separated by `if` statements using the last element of the *stack menu*.
-- The *backing* option is managed by poping out the last element of the pile, letting the previous one beeiong the new menu considered.
+- Allowing the menu exploration by implementation of a 'FIFO' (First In First Out') Data structure where the last element become the actual visited menu.
+- Computing logic of each menu is then separated by `if` statements using the last element of the *stack menu* as the current menu.
+- The *backing* option is managed by poping out the last element of the pile, letting the previous one beeing the active menu.
 - The whole logic is nested into a while loop to allow infinite navigation between menus.
 - User may have the option to properly quit the application in each menu.
 - User navigation is managed by inputs

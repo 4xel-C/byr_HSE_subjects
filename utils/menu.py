@@ -1,3 +1,4 @@
+from .config import MONTH
 from datetime import datetime
 import os
 from rich.console import Console
@@ -6,7 +7,6 @@ from .procedures import Procedure, ProcedureManager
 # initializing the console for rich text
 console = Console()
 
-from .config import MONTH
 
 # Main menu definitions (can be implemented to add sub menus using the stack to navigate)
 MENUS = {
@@ -169,3 +169,20 @@ def select_procedures(manager: ProcedureManager, quarter: int = 1, auto: bool = 
                 return []
             else:
                 return [procedures[choice-1]]
+    
+def want_retry():
+    """Prompt a user to retry an action
+    
+    Returns:
+        Bool: Return a boolean value True or False
+        """
+    while True:
+        choice = input ("Retry ? y/n").strip()
+
+        if choice.isalpha():
+             if choice.upper() in ["Y", "YES", "O", "OUI"]:
+                 return True
+             elif choice.upper() in ["N", "NO", "NON"]:
+                 return False
+        
+        print("Wrong input")

@@ -1,9 +1,9 @@
-import sys
 from datetime import datetime
 from dataclasses import dataclass
 from openpyxl import load_workbook
 from docx import Document
 from docx.shared import Pt
+import os
 
 from .config import PATH, PROCEDURES, HISTORY, TEMPLATES, MONTH
 
@@ -34,7 +34,7 @@ class ProcedureManager:
     def __load_procedures(self) -> None:
         """Load all the procedures details from a file as a Procedure object and store them in self.procedures"""
 
-        procedures_path = self.path + self.procedures_list_file
+        procedures_path = os.path.join(self.path, self.procedures_list_file)
         
         wb = load_workbook(procedures_path)
         sheet = wb.active
@@ -47,7 +47,7 @@ class ProcedureManager:
     def __generate_history(self) -> None:
         """Load the history file and get the last reviewed date for each procedure"""
         
-        history_path = self.path + self.history_file
+        history_path = os.path.join(self.path, self.history_file)
         
         wb = load_workbook(history_path)
         sheet = wb.active
@@ -67,6 +67,7 @@ class ProcedureManager:
         # return the n first procedures
         return procedures[:n] if n else procedures
     
+
     @classmethod
     def write_document(cls, procedures: list[Procedure], quarter: int)-> bool:
         """class method to generate the docx file used for the security discussions based on the selected procedures and the quarter.
@@ -82,9 +83,9 @@ class ProcedureManager:
     
         # get the template correct template path (2 or 3 rows)
         if quarter == 3:
-            template_path = cls.path + cls.templates_files[1]
+            template_path = os.path.join(cls.path, cls.templates_files[1])
         else:
-            template_path = cls.path + cls.templates_files[0]
+            template_path = os.path.join(cls.path, cls.templates_files[0])
         
         # Load the document and select the table
         doc = Document(template_path)
@@ -118,10 +119,59 @@ class ProcedureManager:
         run.font.size = Pt(16)
 
         # Save the document
-        doc.save(f"data/Tableau de documentation des discussions mensuelles de sécurité {year} Q{quarter}.docx")
+        try:
+            doc.save(f"data/Tableau de documentation des discussions mensuelles de sécurité {year} Q{quarter}.docx")
+        except Exception:
+            return False
+        
+        return True
+
+
+    @classmethod
+    def update_history_file(cls, procedures: list[Procedure], quarter:int):
+        """Update the history file with the selected procedures for the concerned quarter to keep track of the review for the next iteration.
+
+        Args:
+            procedures (list[Procedure]): A list of Procedure object to consider while creating the file.
+            quarter (int): The quarter concerned by the redaction of the file.
+
+        Returns:
+            bool: Confirmation of the creation of the file.
+        """
+
+        try:
+            wb = load_workbook(os.path.join(cls.path, cls.history_file))
+        except Exception as e:
+            print(f"Error while loading the file: {e}")
+            return False
+
+        ws = wb.active
+
+        # get the year
+        year = str(datetime.today().year)
+
+        # add the new lines
+        for i, procedure in enumerate(procedures):
+
+            # Get the month number depending of the quarter considered
+            month = (quarter - 1) * 3 + (i +1)
+
+            # Because July and August are merged together, jump July and go directly to September 
+            if month == 8:
+                month = 9
             
-            
-            
+            month = str(month).zfill(2)
+
+
+            ws.append([procedure.number, f"{year}-{month}"])
+        
+        try:
+            wb.save(os.path.join(cls.path, cls.history_file))
+        except Exception as e:
+            print(f"Error while saving the file: {e}")
+            return False
+        
+        return True
         
 
         
