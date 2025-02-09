@@ -1,8 +1,20 @@
-from utils import ProcedureManager, select_quarter, display_menu, select_procedures, display_procedures_menu, display_all_procedures, MENUS, MONTH, console, want_retry
 import os
 
+from utils import (
+    MENUS,
+    MONTH,
+    ProcedureManager,
+    console,
+    display_all_procedures,
+    display_menu,
+    display_procedures_menu,
+    select_procedures,
+    select_quarter,
+    want_retry,
+)
+
+
 def main():
-    
     # Initializing the ProcedureManager object
     proc_manager = ProcedureManager()
 
@@ -16,11 +28,11 @@ def main():
         # Main starting menu
         if current_menu == "main":
             display_menu(current_menu)
-        
+
         # exit menu to quit the application
         elif current_menu == "exit":
             quit("Closing the application.")
-            
+
         # Procedures menu to display all procedures
         elif current_menu == "procedures":
             display_all_procedures(proc_manager)
@@ -31,7 +43,7 @@ def main():
         # Automatic method selection of the procedures based on the least reviewed procedures
         elif current_menu == "auto":
             quarter = select_quarter()
-            
+
             # select procedures automaticly and go to selection menu
             procedures = select_procedures(proc_manager, quarter, auto=True)
             stack.append("validation")
@@ -44,7 +56,9 @@ def main():
 
             # For each month of the quarter, prompt the user to choose a procedure
             for i in range(len(MONTH[quarter])):
-                selection = select_procedures(proc_manager, quarter=quarter, iteration=i)
+                selection = select_procedures(
+                    proc_manager, quarter=quarter, iteration=i
+                )
 
                 # if user choose cancel (empty return, go back to the previous menu)
                 if not selection:
@@ -55,7 +69,7 @@ def main():
             if len(procedures) != len(MONTH[quarter]):
                 stack.pop()
                 continue
-            
+
             stack.append("validation")
             continue
 
@@ -73,28 +87,27 @@ def main():
             if 0 < choice <= len(procedures):
                 replacement = select_procedures(proc_manager)
                 if replacement:
-                    procedures[choice-1] = replacement[0]
+                    procedures[choice - 1] = replacement[0]
                 continue
-            
+
             # Choice confirmation
-            elif choice == len(procedures)+1:
+            elif choice == len(procedures) + 1:
                 stack.append("confirm")
                 continue
 
             # choice "choose another method"
-            elif choice == len(procedures)+2:
+            elif choice == len(procedures) + 2:
                 stack.pop()
                 stack.pop()
                 continue
 
             # choice "exit"
-            elif choice == len(procedures)+3:
+            elif choice == len(procedures) + 3:
                 stack.append("exit")
                 continue
-        
+
         # Confirmation menu after confirming the selection
         elif current_menu == "confirm":
-
             # Write the document
             is_writted = proc_manager.write_document(procedures, quarter)
             if is_writted:
@@ -107,7 +120,7 @@ def main():
                 else:
                     stack.append("exit")
                     continue
-            
+
             # Update the hisotry file:
             is_updated = proc_manager.update_history_file(procedures, quarter)
             if is_updated:
@@ -128,6 +141,6 @@ def main():
         if choice in MENUS[current_menu]:
             stack.append(MENUS[current_menu][choice][1])
 
+
 if __name__ == "__main__":
     main()
-
