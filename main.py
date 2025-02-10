@@ -127,6 +127,7 @@ def main():
                 console.print("[green]The history has been [bold]Updated[/bold]!")
                 input("\nPress any key to exit the application")
                 stack.append("exit")
+                continue
             else:
                 console.print("[red]History couldn't have been updated!")
                 if want_retry():

@@ -56,6 +56,14 @@ class ProcedureManager:
         sheet = wb.active
 
         for number, date in sheet.iter_rows(min_row=2, values_only=True):
+            
+            if not date:
+                continue
+            
+            # check if the date is a datetime object, convert it if needed
+            if not isinstance(date, datetime):
+                date = datetime.strptime(date, "%m/%Y")
+            
             for proc in self.procedures:
                 if number.strip() == proc.number:
                     proc.last_review = max(proc.last_review, date)
@@ -161,8 +169,12 @@ class ProcedureManager:
                 month = 9
 
             month = str(month).zfill(2)
+            
+            # Parse the string
+            date = f"{month}/{year}"
+            date = datetime.strptime(date, "%m/%Y")
 
-            ws.append([procedure.number, f"{year}-{month}"])
+            ws.append([procedure.number, date])
 
         try:
             wb.save(os.path.join(cls.path, cls.history_file))
