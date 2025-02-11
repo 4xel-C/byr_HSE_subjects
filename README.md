@@ -9,7 +9,8 @@
 - [x] Enable procedure checking to make sure no procedure are forgotten.
 - [x] Implement The word file generation
 - [x] Implement The update of the history list
-- [ ] Correction of a bug while loading the application where the history saves the new dates as string and not Date object.
+- [X] Correction of a bug while loading the application where the history saves the new dates as string and not Date object.
+- [ ] Implementation of an automatic mail generation method to send the discussion form
 
 
 # Automation of Subject Generation for HSE Discussions  
