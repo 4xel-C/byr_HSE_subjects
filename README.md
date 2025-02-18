@@ -55,6 +55,7 @@ After proposing the procedures for review, the program lets the user edit the se
 - python >= 3.13
 - openpyxl >= 3.1.5
 - rich >= 13.9.4
+- python-docx >= 1.1.2
 
 ## Installation
 
