@@ -45,8 +45,7 @@ After proposing the procedures for review, the program lets the user edit the se
 
 ## Technologies Used
 - `UV`: For dependencies management and virtual environment.
-- `Jupyter Notebook`: To manipulate the data.
-- `Rich`: To displayer more user friendly messages in the console.
+- `Rich`: To display more user friendly messages in the console.
 - `Openpyxl`: To manipulate and extract information from the excel files.
 - `Datetime`: To keep track of the history of the discussion through datetime object.
 - `Dataclass`: To facilitate creation of a data object.

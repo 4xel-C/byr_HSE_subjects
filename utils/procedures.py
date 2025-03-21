@@ -110,6 +110,7 @@ class ProcedureManager:
             cell_date.text = MONTH[quarter][i]
             cell_subject.text = f"{procedures[i].number}: {procedures[i].title}"
 
+            # update the font of each cells
             for j in range(2):
                 cell = table.cell(i + 1, j)
                 run = cell.paragraphs[0].runs[0]

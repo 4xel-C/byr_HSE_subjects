@@ -33,7 +33,7 @@ def display_menu(menu: str) -> None:
             console.print(f"{key}. {desc}")
 
 
-def display_procedures_menu(procedures: list[Procedure], quarter: int):
+def display_procedures_menu(procedures: list[Procedure], quarter: int) -> None:
     """Display the Validation procedure menu generated when all the procedure for the current quarter have been generated.
 
     Args:
